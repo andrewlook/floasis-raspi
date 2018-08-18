@@ -47,11 +47,14 @@ class Renderer2D(Renderer):
         super(Renderer2D, self).__init__(**kwargs)
         self.width = width,
         self.height = height
+        self.led_cfg = led_cfg
         self.xy_to_ord = None
         self.ord_to_xy = None
-        self.load_cfg(led_cfg)
 
-    def load_cfg(self, fname):
+    def _read_cfg(self, fname):
+        """ file format for TSV:
+                x   y   LED_position
+        """
         if not os.path.exists(fname):
             raise Exception('file doesnt exist: ' + fname)
 
@@ -62,7 +65,10 @@ class Renderer2D(Renderer):
                 raise Exception('num csv rows ({c}) greater than num LEDs {n}'
                                 .format(c=len(rows), n=self.led_num))
             coords = [(int(r[0]), int(r[1]), int(r[2])) for r in rows]
+        return coords
 
+    def load_cfg(self):
+        coords = self._read_cfg(self.led_cfg)
         self.xy_to_ord = [[-1] * self.width] * self.height
         self.ord_to_xy = [(-1, -1)] * self.led_num
 
@@ -72,6 +78,9 @@ class Renderer2D(Renderer):
 
     def apply_xy(self, func, *args, **kwargs):
         """ func should take x,y and return a color (R, G, B) """
+        if not self.ord_to_xy:
+            raise Exception('self.ord_to_xy is missing, run load_cfg first!')
+
         pixels = [func(x=r[0], y=r[1], *args, **kwargs)
                   for r in self.ord_to_xy]
         self.put(pixels)
@@ -99,6 +108,7 @@ def renderer2d_argparser():
 
 
 def renderer2d_from_args(args):
+    print(args)
     return Renderer2D(
         host=args.host,
         port=args.port,

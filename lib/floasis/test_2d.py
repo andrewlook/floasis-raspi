@@ -19,4 +19,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
     renderer2d = renderer2d_from_args(args)
 
+    from pprint import pprint
+    pprint(renderer2d.__dict__)
+
+    renderer2d.load_cfg()
+
+    pprint(renderer2d).ord_to_xy
+
     renderer2d.apply_xy(xy_func)
