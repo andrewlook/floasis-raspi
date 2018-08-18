@@ -93,7 +93,7 @@ if __name__ == '__main__':
         norm_coords = cppn.normalize_coords(coords=renderer2d.ord_to_xy,
                                             width=renderer2d.width,
                                             height=renderer2d.height)
-        print('norm_coords.shape: %s' % norm_coords.shape)
+        print('norm_coords.shape: ', norm_coords.shape)
         with_latent = np.concat(
             norm_coords,
             np.asarray([modcount] * norm_coords.shape[0], dtype=np.float32)
