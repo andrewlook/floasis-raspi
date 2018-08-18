@@ -45,7 +45,7 @@ class Renderer2D(Renderer):
                  height=8,
                  **kwargs):
         super(Renderer2D, self).__init__(**kwargs)
-        self.width = width,
+        self.width = width
         self.height = height
         self.led_cfg = led_cfg
         self.xy_to_ord = None
