@@ -26,4 +26,18 @@ if __name__ == '__main__':
 
     pprint(renderer2d.ord_to_xy)
 
-    renderer2d.apply_xy(xy_func)
+    pixels = [(0, 0, 0)] * renderer2d.led_num
+    for i, coord in enumerate(renderer2d.ord_to_xy):
+        x, y = coord
+        #print('i = {i}   ( x = {x}, y = {y} )'.format(i=i, x=x, y=x))
+
+        color = xy_func(x, y)
+        pixels[i] = color
+
+        print('i = {i}   ( x = {x}, y = {y} ) {c}'.format(i=i, x=x, y=x,
+                                                          c=color))
+
+    pprint(pixels)
+
+    renderer2d.put(pixels)
+
