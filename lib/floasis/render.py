@@ -74,7 +74,7 @@ class Renderer2D(Renderer):
         self.xy_to_ord = [one_row] * self.height
         self.ord_to_xy = [(-1, -1)] * self.led_num
 
-        print('len(self.ord_to_xy): ' + len(self.ord_to_xy))
+        print('len(self.ord_to_xy): %d' % len(self.ord_to_xy))
 
         for x, y, ord in coords:
             print('x={x}, y={y}, ord={ord}')
