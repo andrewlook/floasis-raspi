@@ -73,7 +73,7 @@ class Renderer2D(Renderer):
         self.ord_to_xy = [(-1, -1)] * self.led_num
 
         for x, y, ord in coords:
-            self.mapping[x][y] = ord
+            self.xy_to_ord[x][y] = ord
             self.ord_to_xy[ord] = (x, y)
 
     def apply_xy(self, func, *args, **kwargs):
