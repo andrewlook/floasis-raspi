@@ -24,6 +24,6 @@ if __name__ == '__main__':
 
     renderer2d.load_cfg()
 
-    pprint(renderer2d).ord_to_xy
+    pprint(renderer2d.ord_to_xy)
 
     renderer2d.apply_xy(xy_func)
