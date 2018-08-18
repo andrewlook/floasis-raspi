@@ -14,5 +14,6 @@ if __name__ == '__main__':
     renderer = renderer_from_args()
 
     pixels = measuring_stick(renderer.led_num)
+    pixels = measuring_stick(renderer.led_num)
 
     renderer.put(pixels)
