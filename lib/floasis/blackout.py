@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from lib.floasis.render import renderer_from_args
+from lib.floasis.render import argparser, renderer_from_args
 
 
 def blackout(num_leds=64):
@@ -9,7 +9,9 @@ def blackout(num_leds=64):
 
 
 if __name__ == '__main__':
-    renderer = renderer_from_args()
+    parser = argparser()
+    args = parser.parse_args()
+    renderer = renderer_from_args(args)
 
     pixels = blackout(renderer.led_num)
 

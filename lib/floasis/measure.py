@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from lib.floasis.render import renderer_from_args
+from lib.floasis.render import argparser, renderer_from_args
 
 
 def measuring_stick(num_leds=64):
@@ -11,7 +11,9 @@ def measuring_stick(num_leds=64):
 
 
 if __name__ == '__main__':
-    renderer = renderer_from_args()
+    parser = argparser()
+    args = parser.parse_args()
+    renderer = renderer_from_args(args)
 
     pixels = measuring_stick(renderer.led_num)
     pixels = measuring_stick(renderer.led_num)

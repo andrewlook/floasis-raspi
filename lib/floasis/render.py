@@ -39,14 +39,17 @@ class Renderer(object):
         self.client.put_pixels(_pixels, channel=0)
 
 
-def renderer_from_args():
+def argparser():
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('--port', type=int, default=7890)
     parser.add_argument('--host', default='localhost')
     parser.add_argument('-n', '--led-num', type=int, default=64)
     parser.add_argument('-c', '--led-cfg', default=None)
-    args = parser.parse_args()
+    return parser
+
+
+def renderer_from_args(args):
     return Renderer(host=args.host, port=args.port, led_num=args.led_num,
                     led_cfg=args.led_cfg)
 
