@@ -77,7 +77,7 @@ class Renderer2D(Renderer):
         print('len(self.ord_to_xy): %d' % len(self.ord_to_xy))
 
         for x, y, ord in coords:
-            print('x={x}, y={y}, ord={ord}')
+            print('x={x}, y={y}, ord={ord}'.format(x=x, y=y, ord=ord))
             self.xy_to_ord[x][y] = ord
             self.ord_to_xy[ord] = (x, y)
 
