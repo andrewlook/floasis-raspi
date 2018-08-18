@@ -59,7 +59,10 @@ class CPPN(object):
         normalized = [(
             1.0 * (x / 2) + (1.0 * width / 2),          # centered X
             1.0 * (y / 2) + (1.0 * height / 2),         # centered Y
-            np.sqrt((1.0 * x) ** 2 + (1.0 * y) ** 2),   # radial distance
+            np.sqrt(
+                (1.0 * 1.0 * (x / 2) + (1.0 * width / 2)) ** 2
+                + (1.0 * 1.0 * (y / 2) + (1.0 * height / 2)) ** 2
+            ),   # radial distance
         ) for x, y in coords]
         return np.asarray(normalized)
 
@@ -93,11 +96,15 @@ if __name__ == '__main__':
         norm_coords = cppn.normalize_coords(coords=renderer2d.ord_to_xy,
                                             width=renderer2d.width,
                                             height=renderer2d.height)
+        batch_sz = len(renderer2d.ord_to_xy)
+        latent_vec = np.asarray([modcount] * batch_sz, dtype=np.float32)\
+            .reshape((batch_sz, 1))
         print('norm_coords.shape: ', norm_coords.shape)
-        with_latent = np.concat(
+        print('latent_vec.shape: ', latent_vec.shape)
+        with_latent = np.hstack([
             norm_coords,
-            np.asarray([modcount] * norm_coords.shape[0], dtype=np.float32)
-        )
+            latent_vec,
+        ])
         print('with_latent.shape: %s' % with_latent.shape)
 
         for i, coord in enumerate(renderer2d.ord_to_xy):
