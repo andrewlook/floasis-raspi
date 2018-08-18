@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import time
-from lib.floasis.render import argparser, renderer_from_args
+from lib.floasis.render import renderer_argparser, renderer_from_args
 
 
 def chaser(i, num_leds=64):
@@ -11,7 +11,7 @@ def chaser(i, num_leds=64):
 
 
 if __name__ == '__main__':
-	parser = argparser()
+	parser = renderer_argparser()
 	args = parser.parse_args()
 	renderer = renderer_from_args(args)
 
