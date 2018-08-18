@@ -69,10 +69,15 @@ class Renderer2D(Renderer):
 
     def load_cfg(self):
         coords = self._read_cfg(self.led_cfg)
-        self.xy_to_ord = [[-1] * self.width] * self.height
+        one_row = [-1] * self.width
+        print(one_row)
+        self.xy_to_ord = [one_row] * self.height
         self.ord_to_xy = [(-1, -1)] * self.led_num
 
+        print('len(self.ord_to_xy): ' + len(self.ord_to_xy))
+
         for x, y, ord in coords:
+            print('x={x}, y={y}, ord={ord}')
             self.xy_to_ord[x][y] = ord
             self.ord_to_xy[ord] = (x, y)
 
