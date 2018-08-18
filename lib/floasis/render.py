@@ -47,6 +47,7 @@ def renderer_from_args():
     parser.add_argument('-n', '--led-num', type=int, default=64)
     parser.add_argument('-c', '--led-cfg', default=None)
     args = parser.parse_args()
-    return args
+    return Renderer(host=args.host, port=args.port, led_num=args.led_num,
+                    led_cfg=args.led_cfg)
 
 
