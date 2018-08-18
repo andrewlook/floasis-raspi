@@ -42,7 +42,7 @@ class Renderer2D(Renderer):
     def __init__(self,
                  led_cfg=DEFAULT_LED_CFG,
                  width=8,
-                 height=8,
+                 height=7,
                  **kwargs):
         super(Renderer2D, self).__init__(**kwargs)
         self.width = width
