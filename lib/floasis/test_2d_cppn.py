@@ -38,21 +38,21 @@ class CPPN(object):
                                              loc=0.0, scale=1.0)
 
     def apply_model(self, batch):
-        print('batch.shape: %s' % batch.shape)
-        print('input_layer.shape: %s' % self.input_layer.shape)
-        print('output_layer.shape: %s' % self.output_layer.shape)
+        print('batch.shape: ', batch.shape)
+        print('input_layer.shape: ', self.input_layer.shape)
+        print('output_layer.shape: ', self.output_layer.shape)
 
         H = np.tanh(np.matmul(batch, self.input_layer))
 
-        print('H[input].shape: %s' % H.shape)
+        print('H[input].shape: ', H.shape)
 
         for num, hidden_layer in enumerate(self.hidden_layers):
             H = np.tanh(np.matmul(H, hidden_layer))
-            print('H[%d].shape: %s' % (num, H.shape))
+            print('H[%d].shape: ', (num, H.shape))
 
         H = np.matmul(H, self.output_layer)
         H = 1/(1+np.exp(-H))  # Sigmoid
-        print('H[output].shape: %s' % H.shape)
+        print('H[output].shape: ', H.shape)
         return H
 
     def normalize_coords(self, coords, width, height):
@@ -83,7 +83,8 @@ if __name__ == '__main__':
     renderer2d = renderer2d_from_args(args)
     renderer2d.load_cfg()
 
-    cppn = CPPN()
+    cppn = CPPN(num_latent=2)
+    cppn.build_model()
 
     counter = 0
     counter_scale = 100
@@ -97,15 +98,18 @@ if __name__ == '__main__':
                                             width=renderer2d.width,
                                             height=renderer2d.height)
         batch_sz = len(renderer2d.ord_to_xy)
-        latent_vec = np.asarray([modcount] * batch_sz, dtype=np.float32)\
-            .reshape((batch_sz, 1))
+        latent_vec = np.asarray([np.sin(modcount)] * batch_sz,
+                                dtype=np.float32).reshape((batch_sz, 1))
+        latent_vec2 = np.asarray([np.cos(counter % 20)] * batch_sz,
+                                dtype=np.float32).reshape((batch_sz, 1))
         print('norm_coords.shape: ', norm_coords.shape)
         print('latent_vec.shape: ', latent_vec.shape)
         with_latent = np.hstack([
             norm_coords,
             latent_vec,
+            latent_vec2,
         ])
-        print('with_latent.shape: %s' % with_latent.shape)
+        print('with_latent.shape: ', with_latent.shape)
 
         for i, coord in enumerate(renderer2d.ord_to_xy):
             x, y = coord
@@ -113,7 +117,7 @@ if __name__ == '__main__':
             if x < 0 or y < 0:
                 continue
 
-            color = list(with_latent[i, :] * 255.0)
+            color = list(cppn.apply_model(with_latent[i, :]) * 255.0)
             pixels[i] = color
 
             print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
