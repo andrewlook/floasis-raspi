@@ -2,7 +2,8 @@
 
 # Open Pixel Control client: All lights to solid white
 
-import opc, time
+from lib.fadecandy.core import opc
+import time
 
 numLEDs = 512
 client = opc.Client('localhost:7890')

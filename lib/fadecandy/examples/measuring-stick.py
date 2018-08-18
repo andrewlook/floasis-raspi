@@ -4,7 +4,8 @@
 # For each group of 64 LEDs (one strip), lights all LEDs with every
 # multiple of 10 lit green.
 
-import opc, time
+from lib.fadecandy.core import opc
+import time
 
 numStrings = 8
 client = opc.Client('localhost:7890')

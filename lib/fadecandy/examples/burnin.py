@@ -3,7 +3,8 @@
 # Burn-in test: Keep LEDs at full brightness most of the time, but dim periodically
 # so it's clear when there's a problem.
 
-import opc, time, math
+from lib.fadecandy.core import opc
+import time, math
 
 numLEDs = 512
 client = opc.Client('localhost:7890')

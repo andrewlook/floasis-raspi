@@ -2,7 +2,8 @@
 
 # Light each LED in sequence, and repeat.
 
-import opc, time
+from lib.fadecandy.core import opc
+import time
 
 numLEDs = 30
 client = opc.Client('localhost:7890')

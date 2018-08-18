@@ -1,4 +1,4 @@
-import opc
+from lib.fadecandy.core import opc
 import time
 
 ADDRESS = 'localhost:7890'

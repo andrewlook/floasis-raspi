@@ -2,7 +2,8 @@
 
 # Open Pixel Control client: Every other light to solid white, others dark.
 
-import opc, time
+from lib.fadecandy.core import opc
+import time
 
 numPairs = 256
 client = opc.Client('localhost:7890')

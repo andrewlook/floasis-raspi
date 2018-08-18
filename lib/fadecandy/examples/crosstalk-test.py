@@ -8,7 +8,8 @@
 # according to the strip number, in binary: MSB first, bright green
 # for 1 and dim red for 0.
 
-import opc, time
+from lib.fadecandy.core import opc
+import time
 
 client = opc.Client('localhost:7890')
 
