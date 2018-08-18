@@ -72,7 +72,8 @@ class Renderer2D(Renderer):
 
     def apply_xy(self, func, *args, **kwargs):
         """ func should take x,y and return a color (R, G, B) """
-        pixels = [func(x, y, *args, **kwargs) for (x, y) in self.ord_to_xy]
+        pixels = [func(x=r[0], y=r[1], *args, **kwargs) \
+                  for r in self.ord_to_xy]
         self.put(pixels)
 
 
