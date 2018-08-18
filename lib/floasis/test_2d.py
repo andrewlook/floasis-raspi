@@ -4,6 +4,10 @@ from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
 
 
 def xy_func(x, y):
+    # if the x/y values in the map were -1, render black for this pixel
+    if x < 0 or y < 0:
+        return (0, 0, 0)
+
     retval = (0, 0, 0)
     if y % 2 == 0:
         retval = (128, 128, 128)

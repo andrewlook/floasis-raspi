@@ -63,8 +63,8 @@ class Renderer2D(Renderer):
                                 .format(c=len(rows), n=self.led_num))
             coords = [(int(r[0]), int(r[1]), int(r[2])) for r in rows]
 
-        self.xy_to_ord = [[None] * self.width] * self.height
-        self.ord_to_xy = [None] * self.led_num
+        self.xy_to_ord = [[-1] * self.width] * self.height
+        self.ord_to_xy = [(-1, -1)] * self.led_num
 
         for x, y, ord in coords:
             self.mapping[x][y] = ord
@@ -72,7 +72,7 @@ class Renderer2D(Renderer):
 
     def apply_xy(self, func, *args, **kwargs):
         """ func should take x,y and return a color (R, G, B) """
-        pixels = [func(x=r[0], y=r[1], *args, **kwargs) \
+        pixels = [func(x=r[0], y=r[1], *args, **kwargs)
                   for r in self.ord_to_xy]
         self.put(pixels)
 
