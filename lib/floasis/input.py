@@ -16,31 +16,32 @@ class Incrementor(object):
 
     def __init__(self, pin_a, pin_b):
         self._cnt = 0
+        self._ascending = True
         self.pin_a = pin_a
         self.pin_b = pin_b
 
-        self.pin_a.when_pressed = self.incr
-        self.pin_b.when_pressed = self.decr
+        self.pin_a.when_pressed = self.ccw
+        self.pin_b.when_pressed = self.cw
 
     def revert_check(self):
         if self._cnt > 100:
-            self._cnt = -100
-            print('REVERT')
+            self._ascending = not self._ascending
+            print('REVERT {i}'.format(i=self._ascending))
         elif self._cnt < -100:
-            self._cnt = 100
-            print('REVERT')
+            self._ascending = not self._ascending
+            print('REVERT {i}'.format(i=self._ascending))
 
-    def incr(self):
+    def ccw(self):
         if pin_b.is_pressed:
             self.revert_check()
-            self._cnt += 1
-            print('increment {i}'.format(i=self._cnt))
+            self._cnt = self._cnt + 1 if self._ascending else self._cnt - 1
+            print('ccw {i}'.format(i=self._cnt))
 
-    def decr(self):
+    def cw(self):
         if pin_a.is_pressed:
             self.revert_check()
-            self._cnt -= 1
-            print('decrement {i}'.format(i=self._cnt))
+            self._cnt = self._cnt - 1 if self._ascending else self._cnt + 1
+            print('cw {i}'.format(i=self._cnt))
 
     @property
     def count(self):
