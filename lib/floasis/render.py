@@ -75,9 +75,9 @@ class Renderer2D(Renderer):
     def load_cfg(self):
         print('width {w} height {h}'.format(w=self.width, h=self.height))
         coords = self._read_cfg(self.led_cfg)
-        one_row = [-1] * self.width
+        one_row = [-1] * self.height
         print(one_row)
-        self.xy_to_ord = [one_row] * self.height
+        self.xy_to_ord = [one_row] * self.width
         self.ord_to_xy = [(-1, -1)] * self.led_num
 
         logger.info('len(self.ord_to_xy): %d' % len(self.ord_to_xy))
