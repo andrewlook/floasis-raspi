@@ -55,6 +55,7 @@ class Renderer2D(Renderer):
         self.led_cfg = led_cfg
         self.xy_to_ord = None
         self.ord_to_xy = None
+        self.pixels = [(0, 0, 0)] * self.renderer.led_num
 
     def _read_cfg(self, fname):
         """ file format for TSV:
@@ -86,16 +87,6 @@ class Renderer2D(Renderer):
             print('x={x}, y={y}, ord={ord}'.format(x=x, y=y, ord=ord))
             self.xy_to_ord[x][y] = ord
             self.ord_to_xy[ord] = (x, y)
-
-    def apply_xy(self, func, *args, **kwargs):
-        """ func should take x,y and return a color (R, G, B) """
-        if not self.ord_to_xy:
-            raise Exception('self.ord_to_xy is missing, run load_cfg first!')
-
-        pixels = [func(x=r[0], y=r[1], *args, **kwargs)
-                  for r in self.ord_to_xy]
-        self.put(pixels)
-
 
 def renderer_argparser():
     from argparse import ArgumentParser

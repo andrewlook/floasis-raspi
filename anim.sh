@@ -7,5 +7,5 @@ PYTHONPATH=$(pwd) python3 $(pwd)/lib/floasis/main.py \
     --led-cfg=${LED_MAPPING} \
     --led-num=1024 \
     --width=80 \
-    --height=80 \
+    --height=10 \
     --host=${FADECANDY_HOST}
