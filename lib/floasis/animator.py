@@ -146,7 +146,7 @@ class Animator(object):
         delta = sign * SCALE_STEP_SIZE
         self.scale_2 += delta
         print('scale_2 = {s}, order = {o}'.format(s=self.scale_2,
-                                                        o=self.scale_2_order))
+                                                  o=self.scale_2_order))
 
     def draw(self):
         # get the current animation function
