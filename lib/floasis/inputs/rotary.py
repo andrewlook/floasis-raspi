@@ -23,14 +23,14 @@ class RotaryEncoder(IncrementorManager):
             print('REVERT {i}'.format(i=self._ascending))
  
     def ccw(self):
-        if pin_cw.is_pressed:
+        if self.pin_cw.is_pressed:
             self.revert_check()
             direction = ORDER_UP if self._ascending else ORDER_DOWN
             self.update(direction)
             print('ccw {i}'.format(i=self.val))
  
     def cw(self):
-        if pin_ccw.is_pressed:
+        if self.pin_ccw.is_pressed:
             self.revert_check()
             direction = ORDER_DOWN if self._ascending else ORDER_UP
             self.update(direction)

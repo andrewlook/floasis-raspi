@@ -4,8 +4,8 @@ import logging
 import time
 import numpy as np
 
-from lib.floasis.animations import ANIMATIONS, ALL_ANIMS
-from lib.floasis.input_handler import InputHandler
+from lib.floasis.animations import ANIMATIONS, ALL_ANIMS, \
+    DEFAULT_ANIMATION_FUNC
 from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
 from lib.floasis.config import *
 
@@ -17,9 +17,9 @@ class Animator(object):
 
     def __init__(self,
                  _renderer,
-                 scale_0_mgr,
-                 scale_1_mgr,
-                 speed_coef_mgr):
+                 scale_0_mgr=None,
+                 scale_1_mgr=None,
+                 speed_coef_mgr=None):
         self.renderer = _renderer
 
         self.scale_0_mgr = scale_0_mgr
@@ -44,7 +44,15 @@ class Animator(object):
 
     @property
     def speed_coef(self):
-        return self.speed_coef_mgr.value
+        return self.speed_coef_mgr.val
+
+    @property
+    def scale_0(self):
+        return 0.4 # self.scale_0_mgr.val
+
+    @property
+    def scale_1(self):
+        return 0.4 # self.scale_1_mgr.val
 
     # TODO(look) replace this with the button handler
     def anim_func(self):
@@ -74,9 +82,9 @@ class Animator(object):
         # get the current animation function
         xy_func = self.anim_func()
 
-        pixels = [(0, 0, 0)] * renderer2d.led_num
+        pixels = [(0, 0, 0)] * self.renderer.led_num
         # TODO(look): i vs. ordinal position for missing pixels?
-        for i, coord in enumerate(renderer2d.ord_to_xy):
+        for i, coord in enumerate(self.renderer.ord_to_xy):
             x, y = coord
             # if the x/y values in the map were -1, (meaning the config
             # file says to ignore this pixel), render black for this pixel
@@ -92,6 +100,6 @@ class Animator(object):
 
             # print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
             #                                                   c=color))
-        renderer2d.put(pixels)
+        self.renderer.put(pixels)
         self.counter += 1
 

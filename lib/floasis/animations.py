@@ -11,9 +11,9 @@ def color256(decimal_num):
 
 def cosine(x, y, cnt, **kwargs):
 
-    scale_0 = kwargs.get('scale_0', DEFAULT_SCALE_0)
-    scale_1 = kwargs.get('scale_1', DEFAULT_SCALE_1)
-    scale_2 = kwargs.get('scale_2', DEFAULT_SCALE_2)
+    scale_0 = kwargs.get('scale_0', DEFAULT_VAL)
+    scale_1 = kwargs.get('scale_1', DEFAULT_VAL)
+    scale_2 = scale_0 + scale_1
     speed_coef = kwargs.get('speed_coef', DEFAULT_SPEED_COEF)
 
     t = (speed_coef * cnt)
@@ -25,9 +25,9 @@ def cosine(x, y, cnt, **kwargs):
 
 
 def circle(x, y, cnt, **kwargs):
-    scale_0 = kwargs.get('scale_0', DEFAULT_SCALE_0)
-    scale_1 = kwargs.get('scale_1', DEFAULT_SCALE_1)
-    scale_2 = kwargs.get('scale_2', DEFAULT_SCALE_2)
+    scale_0 = kwargs.get('scale_0', DEFAULT_VAL)
+    scale_1 = kwargs.get('scale_1', DEFAULT_VAL)
+    scale_2 = scale_0 + scale_1
     speed_coef = kwargs.get('speed_coef', DEFAULT_SPEED_COEF)
 
     rad = np.sqrt(((1.0 * x) ** 2) + ((1.0 * y) ** 2))
