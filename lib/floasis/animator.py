@@ -80,7 +80,7 @@ class Animator(object):
     def update_speed_coef(self, newval):
         sigmoided = 1 / (1 + np.exp(-newval))
         self.speed_coef = MIN_SPEED_COEF + (sigmoided * MAX_SPEED_COEF)
-        logger.info('speed_coef = {c} (newval = {n}, sigmoided = {s})'
+        print('speed_coef = {c} (newval = {n}, sigmoided = {s})'
                     .format(c=self.speed_coef, n=newval, s=sigmoided))
 
     def update_scale_0(self):
@@ -92,7 +92,7 @@ class Animator(object):
         sign = 1.0 if self.scale_0_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
         self.scale_0 += delta
-        logger.info('scale_0 = {s}, order = {o}'.format(s=self.scale_0,
+        print('scale_0 = {s}, order = {o}'.format(s=self.scale_0,
                                                         o=self.scale_0_order))
 
     def update_scale_1(self):
@@ -104,7 +104,7 @@ class Animator(object):
         sign = 1.0 if self.scale_1_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
         self.scale_1 += delta
-        logger.info('scale_1 = {s}, order = {o}'.format(s=self.scale_1,
+        print('scale_1 = {s}, order = {o}'.format(s=self.scale_1,
                                                         o=self.scale_1_order))
 
     def update_scale_2(self):
@@ -116,7 +116,7 @@ class Animator(object):
         sign = 1.0 if self.scale_2_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
         self.scale_2 += delta
-        logger.info('scale_2 = {s}, order = {o}'.format(s=self.scale_2,
+        print('scale_2 = {s}, order = {o}'.format(s=self.scale_2,
                                                         o=self.scale_2_order))
 
     def draw(self):
