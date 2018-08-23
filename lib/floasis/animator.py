@@ -80,6 +80,8 @@ class Animator(object):
     def update_speed_coef(self, newval):
         sigmoided = 1 / (1 + np.exp(-newval))
         self.speed_coef = MIN_SPEED_COEF + (sigmoided * MAX_SPEED_COEF)
+        logger.info('speed_coef = {c} (newval = {n}, sigmoided = {s})'
+                    .format(c=self.speed_coef, n=newval, s=sigmoided))
 
     def update_scale_0(self):
         if self.scale_0_order == 'UP' and self.scale_0 >= MAX_SCALE:
