@@ -22,13 +22,13 @@ class Incrementor(object):
             print('REVERT {i}'.format(i=self._ascending))
 
     def ccw(self):
-        if pin_b.is_pressed:
+        if self.pin_b.is_pressed:
             self.revert_check()
             self._cnt = self._cnt + 1 if self._ascending else self._cnt - 1
             print('ccw {i}'.format(i=self._cnt))
 
     def cw(self):
-        if pin_a.is_pressed:
+        if self.pin_a.is_pressed:
             self.revert_check()
             self._cnt = self._cnt - 1 if self._ascending else self._cnt + 1
             print('cw {i}'.format(i=self._cnt))
