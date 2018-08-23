@@ -11,7 +11,8 @@ class IncrementorManager(object):
                  min_value=DEFAULT_MIN_VAL,
                  step_size=DEFAULT_STEP_SIZE,
                  debug=True,
-                 name=''
+                 name='',
+                 loop=False,
                 ):
         self.val = DEFAULT_VAL
         self.min_value = min_value
@@ -19,6 +20,7 @@ class IncrementorManager(object):
         self.step_size = step_size
         self.debug = debug
         self.name = name
+        self.loop = loop
 
     def _log(self, msg):
         if self.debug:
@@ -34,6 +36,8 @@ class IncrementorManager(object):
             self.val = newval
             self._log('{n} value = {s}, order = {o}'
                       .format(n=self.name, s=self.val, o=order))
+        elif self.loop:
+            self.val = self.min_value
         else:
             # # TODO(look): better boundary condition handling?
             #        if self.order == ORDER_UP and self.val >= MAX_SCALE:
