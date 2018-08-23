@@ -1,6 +1,8 @@
 
 from lib.floasis.config import *
 
+EPSILON = 1e-4
+
 class IncrementorManager(object):
 
     def __init__(self,
@@ -9,7 +11,7 @@ class IncrementorManager(object):
                  min_value=DEFAULT_MIN_VAL,
                  step_size=DEFAULT_STEP_SIZE,
                  debug=True):
-        self.value = DEFAULT_VAL
+        self.val = DEFAULT_VAL
         self.min_value = min_value
         self.max_value = max_value
         self.step_size = step_size
@@ -22,19 +24,20 @@ class IncrementorManager(object):
     def update(self, order):
         sign = 1.0 if order == ORDER_UP else -1.0
         delta = sign * self.step_size
-        newval = self.value + delta
+        newval = self.val + delta
         # check boundary conditions
-        if newval <= self.max_value and newval >= self.min_value:
-            self.value = newval
-            self._log('value = {s}, order = {o}'.format(s=self.value, o=order))
+        if newval <= self.max_value + EPSILON \
+                and newval >= self.min_value - EPSILON:
+            self.val = newval
+            self._log('value = {s}, order = {o}'.format(s=self.val, o=order))
         else:
             # # TODO(look): better boundary condition handling?
-            #        if self.order == ORDER_UP and self.value >= MAX_SCALE:
+            #        if self.order == ORDER_UP and self.val >= MAX_SCALE:
             #            self.order = ORDER_DOWN
-            #        elif self.order == ORDER_DOWN and self.value <= MIN_SCALE:
+            #        elif self.order == ORDER_DOWN and self.val <= MIN_SCALE:
             #            self.order = ORDER_UP
             self._log('newval = {n} outside bounds; keep value {v}'
-                      .format(n=newval, v=self.value))
+                      .format(n=newval, v=self.val))
 
     def update_callback(self, order):
         def __callback():
