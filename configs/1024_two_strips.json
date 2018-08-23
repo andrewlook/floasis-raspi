@@ -12,10 +12,13 @@
         "type": "fadecandy",
         "serial": "QOSIPVLJUYXTTLOR",
         "map": [
-            [ 0, 0, 0, 50 ],
-            [ 1, 50, 0, 50 ],
-            [ 2, 100, 0, 50 ]
+            [ 0, 0, 0, 512]
         ]
+    },
+    {
+        "type": "fadecandy",
+        "serial": "DFZITZUAQWVSSCHB",
+        "map": [[ 0, 512, 0, 512]]
     }
 ]
 }

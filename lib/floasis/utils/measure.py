@@ -2,11 +2,20 @@
 
 from lib.floasis.render import renderer_argparser, renderer_from_args
 
+red = 0
+green = 1
+blue = 2
 
 def measuring_stick(num_leds=64):
-    string = [ (128, 128, 128) ] * num_leds
-    for i in range(num_leds / 10):
-        string[10 * i] = (128, 255, 128)
+    string = [ (0, 0, 0) ] * num_leds
+    for i in range(num_leds / 50):
+        color = i % 3
+        rgb = [0, 0, 0]
+        rgb[color] = 50
+        for j in range(0, 50):
+            step = j % 5
+            rgb[color] *= step
+            string[i + j] = rgb
     return string
 
 
