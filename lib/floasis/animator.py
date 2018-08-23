@@ -81,7 +81,6 @@ class Animator(object):
         self.counter += 1
 
 
-
 if __name__ == '__main__':
     parser = renderer2d_argparser()
     args = parser.parse_args()
