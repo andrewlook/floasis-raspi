@@ -88,6 +88,9 @@ if __name__ == '__main__':
     renderer2d = renderer2d_from_args(args)
     renderer2d.load_cfg()
 
+    anim = Animator(_renderer=renderer2d)
+
     while True:
+        anim.draw()
         time.sleep(0.2)
 
