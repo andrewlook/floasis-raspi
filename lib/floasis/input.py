@@ -3,7 +3,7 @@ from time import sleep
 
 red_led = LED(21)
 blue_led = LED(26)
-yel_led = LED(19)
+grn_led = LED(19)
 whi_led = LED(20)
 button_up = Button(18)
 button_down = Button(25)
@@ -52,7 +52,7 @@ incrementor = Incrementor(pin_a, pin_b)
 while True:
     if button_up.is_pressed:
         print("up")
-        yel_led.on()
+        grn_led.on()
     elif button_left.is_pressed:
         print("left")
         blue_led.on()
@@ -63,7 +63,7 @@ while True:
         print("right")
         whi_led.on()
     else:
-        yel_led.off()
+        grn_led.off()
         blue_led.off()
         red_led.off()
         whi_led.off()
