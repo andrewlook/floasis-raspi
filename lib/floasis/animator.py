@@ -40,7 +40,7 @@ class Animator(object):
         #self.speed_coef = DEFAULT_SPEED_COEF
 
         # which animation to do
-        self.anim_num = 0
+        self.anim_num = 1
 
     @property
     def speed_coef(self):
@@ -48,11 +48,13 @@ class Animator(object):
 
     @property
     def scale_0(self):
-        return 0.4 # self.scale_0_mgr.val
+        return self.scale_0_mgr.val
+        # return 0.4 # self.scale_0_mgr.val
 
     @property
     def scale_1(self):
-        return 0.4 # self.scale_1_mgr.val
+        return self.scale_1_mgr.val
+        #return 0.4 # self.scale_1_mgr.val
 
     # TODO(look) replace this with the button handler
     def anim_func(self):
