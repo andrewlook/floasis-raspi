@@ -1,10 +1,14 @@
 #!/usr/bin/env python
 
+import logging
 import time
 import numpy as np
 
 from lib.floasis.input_handler import InputHandler
 from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 DEFAULT_SCALE_0 = 0.2
@@ -86,6 +90,8 @@ class Animator(object):
         sign = 1.0 if self.scale_0_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
         self.scale_0 += delta
+        logger.info('scale_0 = {s}, order = {o}'.format(s=self.scale_0,
+                                                        o=self.scale_0_order))
 
     def update_scale_1(self):
         if self.scale_1_order == 'UP' and self.scale_1 >= MAX_SCALE:
@@ -96,6 +102,8 @@ class Animator(object):
         sign = 1.0 if self.scale_1_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
         self.scale_1 += delta
+        logger.info('scale_1 = {s}, order = {o}'.format(s=self.scale_1,
+                                                        o=self.scale_1_order))
 
     def update_scale_2(self):
         if self.scale_2_order == 'UP' and self.scale_2 >= MAX_SCALE:
@@ -106,6 +114,8 @@ class Animator(object):
         sign = 1.0 if self.scale_2_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
         self.scale_2 += delta
+        logger.info('scale_2 = {s}, order = {o}'.format(s=self.scale_2,
+                                                        o=self.scale_2_order))
 
     def draw(self):
         # get the current animation function
