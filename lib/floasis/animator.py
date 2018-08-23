@@ -2,7 +2,16 @@
 
 import time
 import numpy as np
+
+from lib.floasis.input_handler import InputHandler
 from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
+
+
+DEFAULT_SCALE_0 = 0.2
+DEFAULT_SCALE_1 = 0.4
+DEFAULT_SCALE_2 = 0.8
+DEFAULT_SPEED_COEF = 1.0
+MAX_SPEED_COEF = 10.0
 
 
 def color256(decimal_num):
@@ -17,17 +26,15 @@ def cosine(x, y, cnt, **kwargs):
     scale_0 = kwargs.get('scale_0', DEFAULT_SCALE_0)
     scale_1 = kwargs.get('scale_1', DEFAULT_SCALE_1)
     scale_2 = kwargs.get('scale_2', DEFAULT_SCALE_2)
+    speed_coef = kwargs.get('speed_coef', DEFAULT_SPEED_COEF)
 
-    red = np.cos(scale_0 * x + cnt)
-    green = np.sin(scale_1 * y + cnt)
-    blue = np.sin(scale_2 * x + y + cnt)
+    t = (speed_coef * cnt)
+    red = np.cos(scale_0 * x + t)
+    green = np.sin(scale_1 * y + t)
+    blue = np.sin(scale_2 * x + y + t)
 
     return color256(red), color256(green), color256(blue)
 
-
-DEFAULT_SCALE_0 = 0.2
-DEFAULT_SCALE_1 = 0.4
-DEFAULT_SCALE_2 = 0.8
 
 DEFAULT_ANIMATION_FUNC = cosine
 ANIMATIONS = {
@@ -47,6 +54,7 @@ class Animator(object):
         self.scale_0 = DEFAULT_SCALE_0
         self.scale_1 = DEFAULT_SCALE_1
         self.scale_2 = DEFAULT_SCALE_2
+        self.speed_coef = DEFAULT_SPEED_COEF
 
         # which animation to do
         self.anim_name = 'cosine'
@@ -55,6 +63,11 @@ class Animator(object):
         """ get the current animation function safely - if anything is
         misconfigured, use a default animation function. """
         return ANIMATIONS.get(self.anim_name, DEFAULT_ANIMATION_FUNC)
+
+    def update_speed_coef(self, newval):
+        sigmoided = 1 / (1 + np.exp(-newval))
+        self.speed_coef = sigmoided * MAX_SPEED_COEF
+
 
     def draw(self):
         # get the current animation function
@@ -72,7 +85,8 @@ class Animator(object):
                             cnt=self.counter,
                             scale_0=self.scale_0,
                             scale_1=self.scale_1,
-                            scale_2=self.scale_2)
+                            scale_2=self.scale_2,
+                            speed_coef=self.speed_coef)
             pixels[i] = color
 
             # print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
@@ -88,8 +102,12 @@ if __name__ == '__main__':
     renderer2d.load_cfg()
 
     anim = Animator(_renderer=renderer2d)
+    input_handler = InputHandler(rotary_callback=anim.update_speed_coef)
 
     while True:
+        input_handler.check_input_changes()
+
         anim.draw()
+
         time.sleep(0.2)
 

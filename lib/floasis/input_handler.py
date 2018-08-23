@@ -4,11 +4,12 @@ from time import sleep
 
 class Incrementor(object):
 
-    def __init__(self, pin_a, pin_b):
+    def __init__(self, pin_a, pin_b, update_cnt):
         self._cnt = 0
         self._ascending = True
         self.pin_a = pin_a
         self.pin_b = pin_b
+        self.update_cnt = update_cnt
 
         self.pin_a.when_pressed = self.ccw
         self.pin_b.when_pressed = self.cw
@@ -24,14 +25,20 @@ class Incrementor(object):
     def ccw(self):
         if self.pin_b.is_pressed:
             self.revert_check()
-            self._cnt = self._cnt + 1 if self._ascending else self._cnt - 1
+            self._update(self._cnt + 1 if self._ascending else self._cnt - 1)
             print('ccw {i}'.format(i=self._cnt))
 
     def cw(self):
         if self.pin_a.is_pressed:
             self.revert_check()
-            self._cnt = self._cnt - 1 if self._ascending else self._cnt + 1
+            self._update(self._cnt - 1 if self._ascending else self._cnt + 1)
             print('cw {i}'.format(i=self._cnt))
+
+    def _update(self, newval):
+        self._cnt = newval
+        if self.update_cnt:
+            self.update_cnt(self._cnt)
+
 
     @property
     def count(self):
@@ -40,7 +47,7 @@ class Incrementor(object):
 
 class InputHandler(object):
 
-    def __init__(self):
+    def __init__(self, rotary_callback):
         self.red_led = LED(21)
         self.blue_led = LED(26)
         self.yel_led = LED(19)
@@ -52,7 +59,8 @@ class InputHandler(object):
         self.pin_a = Button(5, pull_up=True)
         self.pin_b = Button(6, pull_up=True)
 
-        self.incrementor = Incrementor(self.pin_a, self.pin_b)
+        self.incrementor = Incrementor(self.pin_a, self.pin_b,
+                                       update_cnt=rotary_callback)
 
     def check_input_changes(self):
         if self.button_up.is_pressed:
