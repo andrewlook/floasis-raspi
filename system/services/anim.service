@@ -1,0 +1,14 @@
+[Unit]
+Description=Animator
+After=network.target
+
+[Service]
+ExecStart=/home/pi/floasis-raspi/anim.sh
+WorkingDirectory=/home/pi/floasis-raspi
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
