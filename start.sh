@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./fadecandy/bin/fcserver-rpi ./configs/one_strip.json
+$(pwd)/fadecandy/bin/fcserver-rpi $(pwd)/configs/fc_config.json
