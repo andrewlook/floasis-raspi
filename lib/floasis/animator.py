@@ -4,13 +4,18 @@ import logging
 import time
 import numpy as np
 
-from lib.floasis.animations import ANIMATIONS, ALL_ANIMS, \
-    DEFAULT_ANIMATION_FUNC
 from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
 from lib.floasis.config import *
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+
+def color256(decimal_num):
+    """ convert a floating point number in the range (-1.0, 1.0) to
+        an int in the range (0, 256)
+    """
+    return int(decimal_num * 128) + 128
 
 
 class Animator(object):
@@ -29,18 +34,16 @@ class Animator(object):
         # time step - makes the animation move
         self.counter = 0
 
-        # variables controlled by inputs, shared across animations
-        #self.scale_0 = DEFAULT_SCALE_0
-        #self.scale_0_order = 'UP'
-        #self.scale_1 = DEFAULT_SCALE_1
-        #self.scale_1_order = 'UP'
-        #self.scale_2 = DEFAULT_SCALE_2
-        #self.scale_2_order = 'UP'
-        
-        #self.speed_coef = DEFAULT_SPEED_COEF
-
         # which animation to do
         self.anim_num = 1
+        
+        self._DEFAULT_ANIMATION_FUNC = cosine
+        self._ANIMATIONS = {
+            'cosine': self.cosine,
+            'circle': self.circle,
+        }
+        self._ALL_ANIMS = list(self._ANIMATIONS.keys())
+        self._NUM_ANIMS = len(self._ALL_ANIMS)
 
     @property
     def speed_coef(self):
@@ -49,42 +52,33 @@ class Animator(object):
     @property
     def scale_0(self):
         return self.scale_0_mgr.val
-        # return 0.4 # self.scale_0_mgr.val
 
     @property
     def scale_1(self):
         return self.scale_1_mgr.val
-        #return 0.4 # self.scale_1_mgr.val
 
     # TODO(look) replace this with the button handler
     def anim_func(self):
         """ get the current animation function safely - if anything is
         misconfigured, use a default animation function. """
-        return ANIMATIONS.get(self.anim_name, DEFAULT_ANIMATION_FUNC)
+        return self._ANIMATIONS.get(self.anim_name, self._DEFAULT_ANIMATION_FUNC)
 
     # TODO(look) replace this with the button handler
     @property
     def anim_name(self):
-        return ALL_ANIMS[self.anim_num]
+        return self._ALL_ANIMS[self.anim_num]
 
     # TODO(look) replace this with the button handler
     def next_anim(self):
         old_anim = self.anim_num
-        self.anim_num = (self.anim_num + 1) % NUM_ANIMS
+        self.anim_num = (self.anim_num + 1) % self._NUM_ANIMS
         new_anim = self.anim_name
         print('{o} -> {n}'.format(o=old_anim, n=new_anim))
-
-#     def update_speed_coef(self, newval):
-#         sigmoided = 1 / (1 + np.exp(-newval))
-#         self.speed_coef = MIN_SPEED_COEF + (sigmoided * MAX_SPEED_COEF)
-#         print('speed_coef = {c} (newval = {n}, sigmoided = {s})'
-#                     .format(c=self.speed_coef, n=newval, s=sigmoided))
 
     def draw(self):
         # get the current animation function
         xy_func = self.anim_func()
 
-        pixels = [(0, 0, 0)] * self.renderer.led_num
         # TODO(look): i vs. ordinal position for missing pixels?
         for i, coord in enumerate(self.renderer.ord_to_xy):
             x, y = coord
@@ -98,10 +92,40 @@ class Animator(object):
                             scale_0=self.scale_0,
                             scale_1=self.scale_1,
                             speed_coef=self.speed_coef)
-            pixels[i] = color
+            self.pixels[i] = color
 
             # print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
             #                                                   c=color))
-        self.renderer.put(pixels)
+        self.renderer.put(self.pixels)
         self.counter += 1
+
+    def cosine(self, x, y, cnt):
+        t = (speed_coef * cnt)
+        red = np.cos(self.scale_0 * x + t)
+        green = np.sin(self.scale_1 * y + t)
+        blue = np.sin((self.scale_0 + self.scale_1) * x + y + t)
+
+        return color256(red), color256(green), color256(blue)
+
+    def circle(self, x, y, cnt):
+        rad = np.sqrt(((1.0 * (self.scale_0 - x)) ** 2) + ((1.0 * (self.scale_1 - y)) ** 2))
+        t = (self.speed_coef * cnt)
+        retval = (
+            color256(np.sin(4.0 * (rad + t))),
+            color256(np.cos(1.0 * (2 * rad + t))),
+            color256(np.cos(2.0 * (rad + t))),
+        )
+        return retval
+
+    def old_circle(self, x, y, cnt):
+        rad = np.sqrt(((1.0 * x) ** 2) + ((1.0 * y) ** 2))
+        t = (self.speed_coef * cnt)
+        retval = (
+            color256(np.sin(self.scale_0 * (rad + t))),
+            color256(np.cos(self.scale_1 * (2 * rad + t))),
+            color256(np.cos((self.scale_0 + self.scale_1) * (rad + t))),
+        )
+        return retval
+
+
 
