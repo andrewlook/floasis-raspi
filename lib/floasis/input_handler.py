@@ -6,6 +6,9 @@ from time import sleep
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
+MAX_VAL = 10
+
+
 
 class Incrementor(object):
 
@@ -20,10 +23,10 @@ class Incrementor(object):
         self.pin_b.when_pressed = self.cw
 
     def revert_check(self):
-        if self._cnt > 100:
+        if self._cnt > MAX_VAL:
             self._ascending = not self._ascending
             logger.debug('REVERT {i}'.format(i=self._ascending))
-        elif self._cnt < -100:
+        elif self._cnt < -MAX_VAL:
             self._ascending = not self._ascending
             logger.debug('REVERT {i}'.format(i=self._ascending))
 
