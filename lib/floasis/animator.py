@@ -16,10 +16,10 @@ DEFAULT_SCALE_1 = 0.4
 DEFAULT_SCALE_2 = 0.8
 DEFAULT_SPEED_COEF = 1.0
 
-MAX_SPEED_COEF = 4.0
+MAX_SPEED_COEF = 2.0
 MIN_SPEED_COEF = 0.4
 
-MAX_SCALE = 2.0
+MAX_SCALE = 1.0
 MIN_SCALE = 0.2
 SCALE_STEP_SIZE = 0.2
 
@@ -91,6 +91,11 @@ class Animator(object):
         # which animation to do
         self.anim_num = 0
 
+    def anim_func(self):
+        """ get the current animation function safely - if anything is
+        misconfigured, use a default animation function. """
+        return ANIMATIONS.get(self.anim_name, DEFAULT_ANIMATION_FUNC)
+
     @property
     def anim_name(self):
         return ALL_ANIMS[self.anim_num]
@@ -100,11 +105,6 @@ class Animator(object):
         self.anim_num = (self.anim_num + 1) % NUM_ANIMS
         new_anim = self.anim_name
         print('{o} -> {n}'.format(o=old_anim, n=new_anim))
-
-    def anim_func(self):
-        """ get the current animation function safely - if anything is
-        misconfigured, use a default animation function. """
-        return ANIMATIONS.get(self.anim_name, DEFAULT_ANIMATION_FUNC)
 
     def update_speed_coef(self, newval):
         sigmoided = 1 / (1 + np.exp(-newval))
@@ -153,6 +153,7 @@ class Animator(object):
         xy_func = self.anim_func()
 
         pixels = [(0, 0, 0)] * renderer2d.led_num
+        # TODO(look): i vs. ordinal position for missing pixels?
         for i, coord in enumerate(renderer2d.ord_to_xy):
             x, y = coord
             # if the x/y values in the map were -1, (meaning the config
@@ -191,8 +192,6 @@ if __name__ == '__main__':
 
     while True:
         input_handler.check_input_changes()
-
         anim.draw()
-
         time.sleep(0.2)
 
