@@ -11,7 +11,13 @@ DEFAULT_SCALE_0 = 0.2
 DEFAULT_SCALE_1 = 0.4
 DEFAULT_SCALE_2 = 0.8
 DEFAULT_SPEED_COEF = 1.0
-MAX_SPEED_COEF = 10.0
+
+MAX_SPEED_COEF = 4.0
+MIN_SPEED_COEF = 0.4
+
+MAX_SCALE = 2.0
+MIN_SCALE = 2.0
+SCALE_STEP_SIZE = 0.2
 
 
 def color256(decimal_num):
@@ -52,8 +58,11 @@ class Animator(object):
 
         # variables controlled by inputs, shared across animations
         self.scale_0 = DEFAULT_SCALE_0
+        self.scale_0_order = 'UP'
         self.scale_1 = DEFAULT_SCALE_1
+        self.scale_1_order = 'UP'
         self.scale_2 = DEFAULT_SCALE_2
+        self.scale_2_order = 'UP'
         self.speed_coef = DEFAULT_SPEED_COEF
 
         # which animation to do
@@ -66,8 +75,17 @@ class Animator(object):
 
     def update_speed_coef(self, newval):
         sigmoided = 1 / (1 + np.exp(-newval))
-        self.speed_coef = sigmoided * MAX_SPEED_COEF
+        self.speed_coef = MIN_SPEED_COEF + (sigmoided * MAX_SPEED_COEF)
 
+    def update_scale_0(self):
+        if self.scale_0_order == 'UP' and self.scale_0 >= MAX_SCALE:
+            self.scale_0_order = 'DOWN'
+        elif self.scale_0_order == 'DOWN' and self.scale_0 <= MIN_SCALE:
+            self.scale_0_order = 'UP'
+
+        sign = 1.0 if self.scale_0_order == 'UP' else -1.0
+        delta = sign * SCALE_STEP_SIZE
+        self.scale_0_order += delta
 
     def draw(self):
         # get the current animation function
@@ -102,7 +120,10 @@ if __name__ == '__main__':
     renderer2d.load_cfg()
 
     anim = Animator(_renderer=renderer2d)
-    input_handler = InputHandler(rotary_callback=anim.update_speed_coef)
+    input_handler = InputHandler(
+        rotary_callback=anim.update_speed_coef,
+        up_callback=anim.update_scale_0,
+    )
 
     while True:
         input_handler.check_input_changes()

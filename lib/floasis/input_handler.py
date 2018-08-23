@@ -1,5 +1,10 @@
+import logging
 from gpiozero import LED, Button
 from time import sleep
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class Incrementor(object):
@@ -17,22 +22,22 @@ class Incrementor(object):
     def revert_check(self):
         if self._cnt > 100:
             self._ascending = not self._ascending
-            print('REVERT {i}'.format(i=self._ascending))
+            logger.debug('REVERT {i}'.format(i=self._ascending))
         elif self._cnt < -100:
             self._ascending = not self._ascending
-            print('REVERT {i}'.format(i=self._ascending))
+            logger.debug('REVERT {i}'.format(i=self._ascending))
 
     def ccw(self):
         if self.pin_b.is_pressed:
             self.revert_check()
             self._update(self._cnt + 1 if self._ascending else self._cnt - 1)
-            print('ccw {i}'.format(i=self._cnt))
+            logger.debug('ccw {i}'.format(i=self._cnt))
 
     def cw(self):
         if self.pin_a.is_pressed:
             self.revert_check()
             self._update(self._cnt - 1 if self._ascending else self._cnt + 1)
-            print('cw {i}'.format(i=self._cnt))
+            logger.debug('cw {i}'.format(i=self._cnt))
 
     def _update(self, newval):
         self._cnt = newval
@@ -47,7 +52,13 @@ class Incrementor(object):
 
 class InputHandler(object):
 
-    def __init__(self, rotary_callback):
+    def __init__(self,
+                 rotary_callback=None,
+                 left_callback=None,
+                 right_callback=None,
+                 down_callback=None,
+                 up_callback=None,
+                 ):
         self.red_led = LED(21)
         self.blue_led = LED(26)
         self.yel_led = LED(19)
@@ -62,19 +73,36 @@ class InputHandler(object):
         self.incrementor = Incrementor(self.pin_a, self.pin_b,
                                        update_cnt=rotary_callback)
 
+        self.left_callback = left_callback
+        self.right_callback = right_callback
+        self.down_callback = down_callback
+        self.up_callback = up_callback
+
     def check_input_changes(self):
         if self.button_up.is_pressed:
-            print("up")
-            self.yel_led.on()
+            logger.debug("up")
+            if self.up_callback:
+                self.up_callback()
+            if self.yel_led:
+                self.yel_led.on()
         elif self.button_left.is_pressed:
-            print("left")
-            self.blue_led.on()
+            logger.debug("left")
+            if self.left_callback:
+                self.left_callback()
+            if self.blue_led:
+                self.blue_led.on()
         elif self.button_down.is_pressed:
-            print("down")
-            self.red_led.on()
+            logger.debug("down")
+            if self.down_callback:
+                self.down_callback()
+            if self.red_led:
+                self.red_led.on()
         elif self.button_right.is_pressed:
-            print("right")
-            self.whi_led.on()
+            logger.debug("right")
+            if self.right_callback:
+                self.right_callback()
+            if self.whi_led:
+                self.whi_led.on()
         else:
             self.yel_led.off()
             self.blue_led.off()
