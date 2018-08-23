@@ -10,12 +10,15 @@ class IncrementorManager(object):
                  max_value=DEFAULT_MAX_VAL,
                  min_value=DEFAULT_MIN_VAL,
                  step_size=DEFAULT_STEP_SIZE,
-                 debug=True):
+                 debug=True,
+                 name=''
+                ):
         self.val = DEFAULT_VAL
         self.min_value = min_value
         self.max_value = max_value
         self.step_size = step_size
         self.debug = debug
+        self.name = name
 
     def _log(self, msg):
         if self.debug:
@@ -29,7 +32,8 @@ class IncrementorManager(object):
         if newval <= self.max_value + EPSILON \
                 and newval >= self.min_value - EPSILON:
             self.val = newval
-            self._log('value = {s}, order = {o}'.format(s=self.val, o=order))
+            self._log('{n} value = {s}, order = {o}'
+                      .format(n=self.name, s=self.val, o=order))
         else:
             # # TODO(look): better boundary condition handling?
             #        if self.order == ORDER_UP and self.val >= MAX_SCALE:
