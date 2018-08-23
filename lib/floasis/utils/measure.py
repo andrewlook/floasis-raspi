@@ -12,10 +12,14 @@ def measuring_stick(num_leds=64):
         color = i % 3
         rgb = [0, 0, 0]
         rgb[color] = 50
+        print(rgb)
         for j in range(0, 50):
             step = j % 5
+            print(step)
             rgb[color] *= step
+            print(rgb)
             string[i + j] = rgb
+    print(string)
     return string
 
 
