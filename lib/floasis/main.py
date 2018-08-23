@@ -11,7 +11,7 @@ from lib.floasis.config import *
 from lib.floasis.inputs.incr_mgr import IncrementorManager
 from lib.floasis.inputs.rotary import RotaryEncoder
 from lib.floasis.inputs.joystick import JoystickManager
-
+from lib.floasis.inputs.buttons import ButtonManager
 
 def setup_rotary():
     pin_ccw = Button(ROTARY_PINID_COUNTERCLOCKWISE, pull_up=True)
@@ -39,6 +39,24 @@ def setup_joystick():
                                    mgr_leftright=leftright)
     return updown, leftright
 
+def setup_button_mgr():
+    btn_args = dict(
+        bounce_time=0.05,
+        hold_time=0.5,
+        hold_repeat=True,
+    )
+    red_button = Button(BUTTON_PINID_RED, **btn_args)
+    blu_button = Button(BUTTON_PINID_BLU, **btn_args)
+    grn_button = Button(BUTTON_PINID_GRN, **btn_args)
+    whi_button = Button(BUTTON_PINID_WHI, **btn_args)
+
+    m = ButtonManager(btn_red=red_button,
+                      btn_grn=grn_button,
+                      btn_blu=blu_button,
+                      btn_whi=whi_button)
+    return m
+
+
 if __name__ == '__main__':
     parser = renderer2d_argparser()
     args = parser.parse_args()
@@ -52,12 +70,14 @@ if __name__ == '__main__':
             time.sleep(5)
     
     rotary_encoder = setup_rotary()
-    updown, leftright = setu_joystick()
+    updown, leftright = setup_joystick()
+    button_mgr = setup_button_mgr()
 
     anim = Animator(_renderer=renderer2d,
                     speed_coef_mgr=rotary_encoder,
                     scale_0_mgr=leftright,
-                    scale_1_mgr=updown)
+                    scale_1_mgr=updown,
+                    buttons=button_mgr)
 
     while True:
         anim.draw()

@@ -24,12 +24,15 @@ class Animator(object):
                  _renderer,
                  scale_0_mgr=None,
                  scale_1_mgr=None,
-                 speed_coef_mgr=None):
+                 speed_coef_mgr=None,
+                 buttons=None,
+                ):
         self.renderer = _renderer
 
         self.scale_0_mgr = scale_0_mgr
         self.scale_1_mgr = scale_1_mgr
         self.speed_coef_mgr = speed_coef_mgr
+        self.buttons = buttons
 
         # time step - makes the animation move
         self.counter = 0
@@ -79,6 +82,17 @@ class Animator(object):
         # get the current animation function
         xy_func = self.anim_func()
 
+        self.red_hold = self.buttons.red_hold
+        self.grn_hold = self.buttons.grn_hold
+        self.blu_hold = self.buttons.blu_hold
+        self.whi_hold = self.buttons.whi_hold
+
+        self.red_press = self.buttons.red_press
+        self.grn_press = self.buttons.grn_press
+        self.blu_press = self.buttons.blu_press
+        self.whi_press = self.buttons.whi_press
+
+        t = self.counter * self.speed_coef
         # TODO(look): i vs. ordinal position for missing pixels?
         for i, coord in enumerate(self.renderer.ord_to_xy):
             x, y = coord
@@ -88,10 +102,9 @@ class Animator(object):
                 continue
 
             color = xy_func(x, y,
-                            cnt=self.counter,
+                            t=t,
                             scale_0=self.scale_0,
-                            scale_1=self.scale_1,
-                            speed_coef=self.speed_coef)
+                            scale_1=self.scale_1)
             self.pixels[i] = color
 
             # print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
@@ -99,21 +112,18 @@ class Animator(object):
         self.renderer.put(self.pixels)
         self.counter += 1
 
-    def cosine(self, x, y, cnt):
-        t = (speed_coef * cnt)
-        red = np.cos(self.scale_0 * x + t)
-        green = np.sin(self.scale_1 * y + t)
-        blue = np.sin((self.scale_0 + self.scale_1) * x + y + t)
-
+    def cosine(self, x, y, r):
+        red = np.cos(self.scale_0 * self.red_hold * (x ** self.scale_1) + t) if self.red_press else 0
+        green = np.sin(self.scale_0 * self.grn_hold * (y ** self.scale_1) + t) if self.grn_press else 0
+        blue = np.sin(self.scale_0 * self.blu_hold * ((x + y) ** self.scale_1) + t) if self.blu_press else 0
         return color256(red), color256(green), color256(blue)
 
-    def circle(self, x, y, cnt):
+    def circle(self, x, y, t):
         rad = np.sqrt(((1.0 * (self.scale_0 - x)) ** 2) + ((1.0 * (self.scale_1 - y)) ** 2))
-        t = (self.speed_coef * cnt)
         retval = (
-            color256(np.sin(4.0 * (rad + t))),
-            color256(np.cos(1.0 * (2 * rad + t))),
-            color256(np.cos(2.0 * (rad + t))),
+            color256(np.sin(self.red_hold * (rad + t)) if self.red_press else 0),
+            color256(np.cos(self.grn_hold * (2 * rad + t)) if self.grn_press else 0),
+            color256(np.cos(self.blu_hold * (rad + t)) if self.blu_press else 0),
         )
         return retval
 
