@@ -178,8 +178,14 @@ class Animator(object):
 if __name__ == '__main__':
     parser = renderer2d_argparser()
     args = parser.parse_args()
-    renderer2d = renderer2d_from_args(args)
-    renderer2d.load_cfg()
+    renderer2d = None
+    while not renderer2d:
+        try:
+            renderer2d = renderer2d_from_args(args)
+            renderer2d.load_cfg()
+        except:
+            print('error connecting')
+            time.sleep(5)
 
     anim = Animator(_renderer=renderer2d)
     input_handler = InputHandler(
