@@ -46,10 +46,29 @@ def cosine(x, y, cnt, **kwargs):
     return color256(red), color256(green), color256(blue)
 
 
+def circle(x, y, cnt, **kwargs):
+    scale_0 = kwargs.get('scale_0', DEFAULT_SCALE_0)
+    scale_1 = kwargs.get('scale_1', DEFAULT_SCALE_1)
+    scale_2 = kwargs.get('scale_2', DEFAULT_SCALE_2)
+    speed_coef = kwargs.get('speed_coef', DEFAULT_SPEED_COEF)
+
+    rad = np.sqrt(((1.0 * x) ** 2) + ((1.0 * y) ** 2))
+    t = (speed_coef * cnt)
+    retval = (
+        color256(np.sin(scale_0 * (rad + t))),
+        color256(np.cos(scale_1 * (2 * rad + t))),
+        color256(np.cos(scale_2 * (rad + t))),
+    )
+    return retval
+
+
 DEFAULT_ANIMATION_FUNC = cosine
 ANIMATIONS = {
     'cosine': cosine,
+    'circle': circle,
 }
+ALL_ANIMS = ANIMATIONS.keys()
+NUM_ANIMS = len(ALL_ANIMS)
 
 
 class Animator(object):
@@ -70,7 +89,17 @@ class Animator(object):
         self.speed_coef = DEFAULT_SPEED_COEF
 
         # which animation to do
-        self.anim_name = 'cosine'
+        self.anim_num = 0
+
+    @property
+    def anim_name(self):
+        return ALL_ANIMS[self.anim_num]
+
+    def next_anim(self):
+        old_anim = self.anim_num
+        self.anim_num = (self.anim_num + 1) % NUM_ANIMS
+        new_anim = self.anim_name
+        print('{o} -> {n}'.format(o=old_anim, n=new_anim))
 
     def anim_func(self):
         """ get the current animation function safely - if anything is
@@ -157,6 +186,7 @@ if __name__ == '__main__':
         up_callback=anim.update_scale_0,
         left_callback=anim.update_scale_1,
         right_callback=anim.update_scale_2,
+        down_callback=anim.next_anim,
     )
 
     while True:
