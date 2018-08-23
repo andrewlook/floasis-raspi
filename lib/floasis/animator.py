@@ -67,7 +67,7 @@ ANIMATIONS = {
     'cosine': cosine,
     'circle': circle,
 }
-ALL_ANIMS = ANIMATIONS.keys()
+ALL_ANIMS = list(ANIMATIONS.keys())
 NUM_ANIMS = len(ALL_ANIMS)
 
 
