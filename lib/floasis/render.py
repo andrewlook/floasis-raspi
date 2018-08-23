@@ -57,7 +57,7 @@ class Renderer2D(Renderer):
         self.tick = tick
         self.xy_to_ord = None
         self.ord_to_xy = None
-        self.pixels = [(0, 0, 0)] * self.renderer.led_num
+        self.pixels = [(0, 0, 0)] * self.led_num
 
     def _read_cfg(self, fname):
         """ file format for TSV:
@@ -121,5 +121,5 @@ def renderer2d_from_args(args):
         width=args.width,
         height=args.height,
         led_cfg=args.led_cfg,
-        tick=tick,
+        tick=args.tick,
     )

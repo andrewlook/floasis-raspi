@@ -40,7 +40,7 @@ class Animator(object):
         # which animation to do
         self.anim_num = 1
         
-        self._DEFAULT_ANIMATION_FUNC = cosine
+        self._DEFAULT_ANIMATION_FUNC = self.cosine
         self._ANIMATIONS = {
             'cosine': self.cosine,
             'circle': self.circle,
@@ -92,7 +92,37 @@ class Animator(object):
         self.blu_press = self.buttons.blu_press
         self.whi_press = self.buttons.whi_press
 
+        self.red_down = self.buttons.red_down
+        self.grn_down = self.buttons.grn_down
+        self.blu_down = self.buttons.blu_down
+        self.whi_down = self.buttons.whi_down
+
         t = self.counter * self.speed_coef
+
+        if self.counter % 100:
+            print('speed={s} t={t}, s0={s0}, s1={s1}'
+                  '\n\trp={rp}, gp={gp}, bp={bp}, wp={wp}'
+                  '\n\trh={rh}, gh={gh}, bh={bh}, wh={wh}'
+                  '\n\trd={rd}, gd={gd}, bd={bd}, wd={wd}'
+                  .format(s=self.speed_coef,
+                          t=t,
+                          s0=self.scale_0,
+                          s1=self.scale_1,
+                          rp=self.red_press,
+                          gp=self.grn_press,
+                          bp=self.blu_press,
+                          wp=self.whi_press,
+                          rh=self.red_hold,
+                          gh=self.grn_hold,
+                          bh=self.blu_hold,
+                          wh=self.whi_hold,
+                          rd=self.red_down,
+                          gd=self.grn_down,
+                          bd=self.blu_down,
+                          wd=self.whi_down,
+                         )
+                 )
+
         # TODO(look): i vs. ordinal position for missing pixels?
         for i, coord in enumerate(self.renderer.ord_to_xy):
             x, y = coord
@@ -101,29 +131,32 @@ class Animator(object):
             if x < 0 or y < 0:
                 continue
 
-            color = xy_func(x, y,
-                            t=t,
-                            scale_0=self.scale_0,
-                            scale_1=self.scale_1)
-            self.pixels[i] = color
+            color = xy_func(x, y, t=t)
+            self.renderer.pixels[i] = color
 
             # print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
             #                                                   c=color))
-        self.renderer.put(self.pixels)
+        self.renderer.put(self.renderer.pixels)
         self.counter += 1
 
-    def cosine(self, x, y, r):
-        red = np.cos(self.scale_0 * self.red_hold * (x ** self.scale_1) + t) if self.red_press else 0
-        green = np.sin(self.scale_0 * self.grn_hold * (y ** self.scale_1) + t) if self.grn_press else 0
-        blue = np.sin(self.scale_0 * self.blu_hold * ((x + y) ** self.scale_1) + t) if self.blu_press else 0
-        return color256(red), color256(green), color256(blue)
+    def cosine(self, x, y, t):
+        #red = np.cos(self.scale_0 * self.red_hold * (x ** self.scale_1) + t) if self.red_down else 0
+        #grn = np.sin(self.scale_0 * self.grn_hold * (y ** self.scale_1) + t) if self.grn_down else 0
+        #blu = np.sin(self.scale_0 * self.blu_hold * ((x + y) ** self.scale_1) + t) if self.blu_down else 0
+        red = np.cos(self.red_hold * x + t) if self.red_down else 0
+        grn = np.sin(self.grn_hold * y + t) if self.grn_down else 0
+        blu = np.sin(self.blu_hold * (x + y) + t) if self.blu_down else 0
+        return color256(red), color256(grn), color256(blu)
 
     def circle(self, x, y, t):
         rad = np.sqrt(((1.0 * (self.scale_0 - x)) ** 2) + ((1.0 * (self.scale_1 - y)) ** 2))
         retval = (
-            color256(np.sin(self.red_hold * (rad + t)) if self.red_press else 0),
-            color256(np.cos(self.grn_hold * (2 * rad + t)) if self.grn_press else 0),
-            color256(np.cos(self.blu_hold * (rad + t)) if self.blu_press else 0),
+            #color256(np.sin(self.red_hold * (rad + t)) if self.red_down else 0),
+            #color256(np.cos(self.grn_hold * (2 * rad + t)) if self.grn_down else 0),
+            #color256(np.cos(self.blu_hold * (rad + t)) if self.blu_down else 0),
+            color256(np.sin(self.red_hold * (rad + t)) if self.red_down else 0),
+            color256(np.cos(self.grn_hold * (rad + t)) if self.grn_down else 0),
+            color256(np.cos(self.blu_hold * (rad + t)) if self.blu_down else 0),
         )
         return retval
 
