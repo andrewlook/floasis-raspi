@@ -69,15 +69,17 @@ class Animator(object):
     # TODO(look) replace this with the button handler
     @property
     def anim_name(self):
-        return self._ALL_ANIMS[self.anim_num]
-
-    # TODO(look) replace this with the button handler
-    def next_anim(self):
-        old_anim = self.anim_num
-        self.anim_num = (self.anim_num + 1) % self._NUM_ANIMS
-        new_anim = self.anim_name
-        print('{o} -> {n}'.format(o=old_anim, n=new_anim))
-
+        num = int(self.buttons.whi_press) % self._NUM_ANIMS
+        return self._ALL_ANIMS[num]
+#         return self._ALL_ANIMS[self.anim_num]
+# 
+#     # TODO(look) replace this with the button handler
+#     def next_anim(self):
+#         old_anim = self.anim_num
+#         self.anim_num = (self.anim_num + 1) % self._NUM_ANIMS
+#         new_anim = self.anim_name
+#         print('{o} -> {n}'.format(o=old_anim, n=new_anim))
+# 
     def draw(self):
         # get the current animation function
         xy_func = self.anim_func()
@@ -143,19 +145,25 @@ class Animator(object):
         #red = np.cos(self.scale_0 * self.red_hold * (x ** self.scale_1) + t) if self.red_down else 0
         #grn = np.sin(self.scale_0 * self.grn_hold * (y ** self.scale_1) + t) if self.grn_down else 0
         #blu = np.sin(self.scale_0 * self.blu_hold * ((x + y) ** self.scale_1) + t) if self.blu_down else 0
-        red = np.cos(self.red_hold * x + t) if self.red_down else 0
-        grn = np.sin(self.grn_hold * y + t) if self.grn_down else 0
-        blu = np.sin(self.blu_hold * (x + y) + t) if self.blu_down else 0
-        return color256(red), color256(grn), color256(blu)
+        s0 = self.scale_0 * 3.0
+        s1 = self.scale_1 * 3.0
+        coord = (s0 * x) + (s1 * y)
+
+        red = np.cos(self.red_hold * coord + t) if self.red_down else 0
+        grn = np.sin(self.grn_hold * coord + t) if self.grn_down else 0
+        blu = np.sin(self.blu_hold * coord + t) if self.blu_down else 0
+        return color256(grn), color256(red), color256(blu)
 
     def circle(self, x, y, t):
-        rad = np.sqrt(((1.0 * (self.scale_0 - x)) ** 2) + ((1.0 * (self.scale_1 - y)) ** 2))
+        center_x = self.scale_0 * self.renderer.width
+        center_y = self.scale_1 * self.renderer.height
+        rad = np.sqrt(((1.0 * (center_x - x)) ** 2) + ((1.0 * (center_y - y)) ** 2))
         retval = (
             #color256(np.sin(self.red_hold * (rad + t)) if self.red_down else 0),
             #color256(np.cos(self.grn_hold * (2 * rad + t)) if self.grn_down else 0),
             #color256(np.cos(self.blu_hold * (rad + t)) if self.blu_down else 0),
-            color256(np.sin(self.red_hold * (rad + t)) if self.red_down else 0),
             color256(np.cos(self.grn_hold * (rad + t)) if self.grn_down else 0),
+            color256(np.sin(self.red_hold * (rad + t)) if self.red_down else 0),
             color256(np.cos(self.blu_hold * (rad + t)) if self.blu_down else 0),
         )
         return retval

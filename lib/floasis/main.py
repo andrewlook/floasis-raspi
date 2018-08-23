@@ -40,10 +40,10 @@ if __name__ == '__main__':
                       btn_whi=whi_button)
 
 
-    updown = IncrementorManager(name='scale_0', min_value=1, max_value=80,
-                                default_value=10, step_size=1)
-    leftright = IncrementorManager(name='scale_1', min_value=1, max_value=80,
-                                default_value=10, step_size=1)
+    updown = IncrementorManager(name='scale_0', min_value=0.0, max_value=1.0,
+                                default_value=0.2, step_size=0.05)
+    leftright = IncrementorManager(name='scale_1', min_value=0.0, max_value=1.0,
+                                default_value=0.2, step_size=0.05)
     joystick_up = Button(JOYSTICK_PINID_UP)
     joystick_down = Button(JOYSTICK_PINID_DOWN)
     joystick_left = Button(JOYSTICK_PINID_LEFT)
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     pin_ccw = Button(ROTARY_PINID_COUNTERCLOCKWISE, pull_up=True)
     pin_cw = Button(ROTARY_PINID_CLOCKWISE, pull_up=True)
     rotary_encoder = RotaryEncoder(pin_ccw, pin_cw,
-                                   max_value=2.0,
+                                   max_value=3.0,
                                    step_size=0.1)
 
     anim = Animator(_renderer=renderer2d,
