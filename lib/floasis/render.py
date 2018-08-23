@@ -48,11 +48,13 @@ class Renderer2D(Renderer):
                  led_cfg=DEFAULT_LED_CFG,
                  width=8,
                  height=7,
+                 tick=0.2,
                  **kwargs):
         super(Renderer2D, self).__init__(**kwargs)
         self.width = width
         self.height = height
         self.led_cfg = led_cfg
+        self.tick = tick
         self.xy_to_ord = None
         self.ord_to_xy = None
         self.pixels = [(0, 0, 0)] * self.renderer.led_num
@@ -106,6 +108,7 @@ def renderer2d_argparser():
     parser.add_argument('--width', type=int, default=8)
     parser.add_argument('--height', type=int, default=8)
     parser.add_argument('--led-cfg', default=None)
+    parser.add_argument('--tick', type=float, default=0.2)
     return parser
 
 
@@ -117,5 +120,6 @@ def renderer2d_from_args(args):
         led_num=args.led_num,
         width=args.width,
         height=args.height,
-        led_cfg=args.led_cfg
+        led_cfg=args.led_cfg,
+        tick=tick,
     )
