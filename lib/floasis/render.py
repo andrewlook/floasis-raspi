@@ -1,8 +1,13 @@
 import os
+import logging
 import time
 import numpy as np
 
 from lib.fadecandy.core import opc
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 
 DEFAULT_HOST = 'localhost'
 DEFAULT_PORT = '7890'
@@ -26,7 +31,7 @@ class Renderer(object):
 
         # Test if it can connect (optional)
         if self.client.can_connect():
-            print('connected to %s' % self.address)
+            logger.info('connected to %s' % self.address)
         else:
             # We could exit here, but instead let's just print a warning
             # and then keep trying to send pixels in case the server
@@ -74,10 +79,10 @@ class Renderer2D(Renderer):
         self.xy_to_ord = [one_row] * self.height
         self.ord_to_xy = [(-1, -1)] * self.led_num
 
-        print('len(self.ord_to_xy): %d' % len(self.ord_to_xy))
+        logger.info('len(self.ord_to_xy): %d' % len(self.ord_to_xy))
 
         for x, y, ord in coords:
-            print('x={x}, y={y}, ord={ord}'.format(x=x, y=y, ord=ord))
+            logger.info('x={x}, y={y}, ord={ord}'.format(x=x, y=y, ord=ord))
             self.xy_to_ord[x][y] = ord
             self.ord_to_xy[ord] = (x, y)
 
@@ -113,7 +118,7 @@ def renderer2d_argparser():
 
 
 def renderer2d_from_args(args):
-    print(args)
+    logger.info(args)
     return Renderer2D(
         host=args.host,
         port=args.port,

@@ -85,7 +85,27 @@ class Animator(object):
 
         sign = 1.0 if self.scale_0_order == 'UP' else -1.0
         delta = sign * SCALE_STEP_SIZE
-        self.scale_0_order += delta
+        self.scale_0 += delta
+
+    def update_scale_1(self):
+        if self.scale_1_order == 'UP' and self.scale_1 >= MAX_SCALE:
+            self.scale_1_order = 'DOWN'
+        elif self.scale_1_order == 'DOWN' and self.scale_1 <= MIN_SCALE:
+            self.scale_1_order = 'UP'
+
+        sign = 1.0 if self.scale_1_order == 'UP' else -1.0
+        delta = sign * SCALE_STEP_SIZE
+        self.scale_1 += delta
+
+    def update_scale_2(self):
+        if self.scale_2_order == 'UP' and self.scale_2 >= MAX_SCALE:
+            self.scale_2_order = 'DOWN'
+        elif self.scale_2_order == 'DOWN' and self.scale_2 <= MIN_SCALE:
+            self.scale_2_order = 'UP'
+
+        sign = 1.0 if self.scale_2_order == 'UP' else -1.0
+        delta = sign * SCALE_STEP_SIZE
+        self.scale_2 += delta
 
     def draw(self):
         # get the current animation function
@@ -123,6 +143,8 @@ if __name__ == '__main__':
     input_handler = InputHandler(
         rotary_callback=anim.update_speed_coef,
         up_callback=anim.update_scale_0,
+        left_callback=anim.update_scale_1,
+        right_callback=anim.update_scale_2,
     )
 
     while True:
