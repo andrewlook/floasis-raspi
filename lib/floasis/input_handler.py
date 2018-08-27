@@ -2,25 +2,28 @@ import logging
 from gpiozero import LED, Button
 from time import sleep
 
+from lib.floasis.config import *
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
-MAX_VAL = 10
-
+MAX_VAL = 1.0
+MIN_VAL = 0.0
+STEP_SIZE = 0.05
 
 
 class Incrementor(object):
 
-    def __init__(self, pin_a, pin_b, update_cnt):
+    def __init__(self, pin_ccw, pin_cw, update_cnt):
         self._cnt = 0
         self._ascending = True
-        self.pin_a = pin_a
-        self.pin_b = pin_b
+        self.pin_ccw = pin_ccw
+        self.pin_cw = pin_cw
         self.update_cnt = update_cnt
 
-        self.pin_a.when_pressed = self.ccw
-        self.pin_b.when_pressed = self.cw
+        self.pin_ccw.when_pressed = self.ccw
+        self.pin_cw.when_pressed = self.cw
 
     def revert_check(self):
         if self._cnt > MAX_VAL:
@@ -31,13 +34,13 @@ class Incrementor(object):
             logger.debug('REVERT {i}'.format(i=self._ascending))
 
     def ccw(self):
-        if self.pin_b.is_pressed:
+        if self.pin_cw.is_pressed:
             self.revert_check()
             self._update(self._cnt + 1 if self._ascending else self._cnt - 1)
             logger.debug('ccw {i}'.format(i=self._cnt))
 
     def cw(self):
-        if self.pin_a.is_pressed:
+        if self.pin_ccw.is_pressed:
             self.revert_check()
             self._update(self._cnt - 1 if self._ascending else self._cnt + 1)
             logger.debug('cw {i}'.format(i=self._cnt))
@@ -62,18 +65,14 @@ class InputHandler(object):
                  down_callback=None,
                  up_callback=None,
                  ):
-        self.red_led = LED(21)
-        self.blue_led = LED(26)
-        self.yel_led = LED(19)
-        self.whi_led = LED(20)
-        self.button_up = Button(18)
-        self.button_down = Button(25)
-        self.button_left = Button(4)
-        self.button_right = Button(24)
-        self.pin_a = Button(5, pull_up=True)
-        self.pin_b = Button(6, pull_up=True)
+        self.joystick_up = Button(JOYSTICK_PINID_UP)
+        self.joystick_down = Button(JOYSTICK_PINID_DOWN)
+        self.joystick_left = Button(JOYSTICK_PINID_LEFT)
+        self.joystick_right = Button(JOYSTICK_PINID_RIGHT)
+        self.pin_ccw = Button(ROTARY_PINID_COUNTERCLOCKWISE, pull_up=True)
+        self.pin_cw = Button(ROTARY_PINID_CLOCKWISE, pull_up=True)
 
-        self.incrementor = Incrementor(self.pin_a, self.pin_b,
+        self.incrementor = Incrementor(self.pin_ccw, self.pin_cw,
                                        update_cnt=rotary_callback)
 
         self.left_callback = left_callback
@@ -82,35 +81,22 @@ class InputHandler(object):
         self.up_callback = up_callback
 
     def check_input_changes(self):
-        if self.button_up.is_pressed:
+        if self.joystick_up.is_pressed:
             logger.debug("up")
             if self.up_callback:
                 self.up_callback()
-            if self.yel_led:
-                self.yel_led.on()
-        elif self.button_left.is_pressed:
+        elif self.joystick_left.is_pressed:
             logger.debug("left")
             if self.left_callback:
                 self.left_callback()
-            if self.blue_led:
-                self.blue_led.on()
-        elif self.button_down.is_pressed:
+        elif self.joystick_down.is_pressed:
             logger.debug("down")
             if self.down_callback:
                 self.down_callback()
-            if self.red_led:
-                self.red_led.on()
-        elif self.button_right.is_pressed:
+        elif self.joystick_right.is_pressed:
             logger.debug("right")
             if self.right_callback:
                 self.right_callback()
-            if self.whi_led:
-                self.whi_led.on()
-        else:
-            self.yel_led.off()
-            self.blue_led.off()
-            self.red_led.off()
-            self.whi_led.off()
 
 
 if __name__ == '__main__':
