@@ -22,10 +22,10 @@ RSYNC_OPTS="-avz --exclude=.git"
 
 if [[ "${OPERATION}" = "push" ]]; then
     echo "PUSH -> ${HOSTNAME}"
-    echo "rsync ${RSYNC_OPTS} ${LOCAL_DIR} ${REMOTE_DIR}"
+    rsync ${RSYNC_OPTS} ${LOCAL_DIR}/ ${REMOTE_DIR}  # trailing slash so copy files not dir
 elif [[ "${OPERATION}" = "pull" ]]; then 
     echo "PULL <- ${HOSTNAME}"
-    echo "rsync ${RSYNC_OPTS} ${REMOTE_DIR} ${LOCAL_DIR}"
+    rsync ${RSYNC_OPTS} ${REMOTE_DIR} ${LOCAL_DIR}
 else
     echo "invalid operation"
     exit 1
