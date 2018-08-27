@@ -6,22 +6,9 @@ import numpy as np
 
 from lib.floasis.input_handler import InputHandler
 from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
-
+from lib.floasis.config import *
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-
-
-DEFAULT_SCALE_0 = 0.2
-DEFAULT_SCALE_1 = 0.4
-DEFAULT_SCALE_2 = 0.8
-DEFAULT_SPEED_COEF = 1.0
-
-MAX_SPEED_COEF = 2.0
-MIN_SPEED_COEF = 0.4
-
-MAX_SCALE = 1.0
-MIN_SCALE = 0.2
-SCALE_STEP_SIZE = 0.2
 
 
 def color256(decimal_num):
