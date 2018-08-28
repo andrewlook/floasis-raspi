@@ -73,6 +73,7 @@ class Renderer2D(Renderer):
         return coords
 
     def load_cfg(self):
+        print('width {w} height {h}'.format(w=self.width, h=self.height))
         coords = self._read_cfg(self.led_cfg)
         one_row = [-1] * self.width
         print(one_row)

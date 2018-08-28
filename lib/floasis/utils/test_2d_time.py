@@ -6,8 +6,8 @@ from pprint import pprint
 from lib.floasis.render import renderer2d_argparser, renderer2d_from_args
 
 
-def xy_func(x, y, cnt):
-    modded = cnt % 8
+def xy_func(x, y, cnt, width=8):
+    modded = cnt % width
     retval = (0, 0, 0)
     if x == modded:
         retval = (128, 128, 128)
@@ -30,7 +30,7 @@ if __name__ == '__main__':
             if x < 0 or y < 0:
                 continue
 
-            color = xy_func(x, y, cnt=counter)
+            color = xy_func(x, y, cnt=counter, width=renderer2d.width)
             pixels[i] = color
 
             print('i = {i}   ( x = {x}, y = {y} )  {c}'.format(i=i, x=x, y=x,
