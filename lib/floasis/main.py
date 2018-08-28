@@ -21,8 +21,14 @@ if __name__ == '__main__':
         except:
             print('error connecting')
             time.sleep(5)
+    
+    pin_ccw = Button(ROTARY_PINID_COUNTERCLOCKWISE, pull_up=True)
+    pin_cw = Button(ROTARY_PINID_CLOCKWISE, pull_up=True)
+    rotary_encoder = RotaryEncoder(pin_ccw, pin_cw)
 
-    anim = Animator(_renderer=renderer2d)
+    anim = Animator(_renderer=renderer2d,
+                    speed_coef_mgr=rotary_encoder)
+
     input_handler = InputHandler(
         rotary_callback=anim.update_speed_coef,
         up_callback=anim.update_scale_0,
