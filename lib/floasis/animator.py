@@ -42,7 +42,9 @@ class Animator(object):
         # which animation to do
         self.anim_num = 0
 
-    
+    @property
+    def speed_coef(self):
+        return self.speed_coef_mgr.value
 
     # TODO(look) replace this with the button handler
     def anim_func(self):
@@ -62,11 +64,11 @@ class Animator(object):
         new_anim = self.anim_name
         print('{o} -> {n}'.format(o=old_anim, n=new_anim))
 
-    def update_speed_coef(self, newval):
-        sigmoided = 1 / (1 + np.exp(-newval))
-        self.speed_coef = MIN_SPEED_COEF + (sigmoided * MAX_SPEED_COEF)
-        print('speed_coef = {c} (newval = {n}, sigmoided = {s})'
-                    .format(c=self.speed_coef, n=newval, s=sigmoided))
+#     def update_speed_coef(self, newval):
+#         sigmoided = 1 / (1 + np.exp(-newval))
+#         self.speed_coef = MIN_SPEED_COEF + (sigmoided * MAX_SPEED_COEF)
+#         print('speed_coef = {c} (newval = {n}, sigmoided = {s})'
+#                     .format(c=self.speed_coef, n=newval, s=sigmoided))
 
     def draw(self):
         # get the current animation function
