@@ -9,22 +9,35 @@ blue = 2
 def measuring_stick(start=0, num=50, num_leds=50):
     string = [ (0, 0, 0) ] * num_leds
     for i in range(num):
-        rgb = (128, 128, 128)
+        val = 0
         mod = i % 5
         if mod == 0:
-            rgb = (128, 0, 0)
+            val = 255
         elif mod == 1:
-            rgb = (0, 128, 0)
+            val = 200
         elif mod == 2:
-            rgb = (0, 0, 128)
+            val = 150
         elif mod == 3:
-            rgb = (128, 128, 0)
+            val = 100
         elif mod == 4:
-            rgb = (0, 128, 128)
+            val = 50
         else:
             raise Exception('wtf')
+
+        quarter = (i / 5) % 4
+        if quarter == 0:
+            rgb = (val, 0, 0)
+        elif quarter == 1:
+            rgb = (0, val, 0)
+        elif quarter == 2:
+            rgb = (0, 0, val)
+        elif quarter == 3:
+            rgb = (val, val, 0)
+
+        if mod == 4:
+            rgb = (128, 128, 128)
+        print(start + i)
         string[start + i] = rgb
-    print(string)
     return string
 
 

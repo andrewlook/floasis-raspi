@@ -8,6 +8,8 @@ def xy_func(x, y):
     retval = (0, 0, 0)
     if y % 2 == 0:
         retval = (128, 128, 128)
+    else:
+        retval = (128, 0, 0)
     return retval
 
 
