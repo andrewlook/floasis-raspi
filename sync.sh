@@ -18,12 +18,13 @@ fi
 HOSTNAME="raspberrypi${HOSTNUM}.local"
 REMOTE_DIR="pi@${HOSTNAME}:/home/pi/floasis-raspi/"  # trailing slash so copy files not dir
 LOCAL_DIR="$(pwd)"
-RSYNC_OPTS="-avz"
+RSYNC_OPTS="-avz --exclude=.git/"
 
 if [[ "${OPERATION}" = "push" ]]; then
     echo "PUSH -> ${HOSTNAME}"
-    rsync ${RSYNC_OPTS} ${LOCAL_DIR}/ ${REMOTE_DIR}  # trailing slash so copy files not dir
-elif [[ "${OPERATION}" = "pull" ]]; then 
+    # trailing slash so copy files not dir
+    rsync ${RSYNC_OPTS} ${LOCAL_DIR}/ ${REMOTE_DIR}
+elif [[ "${OPERATION}" = "pull" ]]; then
     echo "PULL <- ${HOSTNAME}"
     rsync ${RSYNC_OPTS} ${REMOTE_DIR} ${LOCAL_DIR}
 else
