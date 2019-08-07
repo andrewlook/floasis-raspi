@@ -1,7 +1,8 @@
 #!/bin/bash
 
 export LED_MAPPING="$(pwd)/configs/floasis_2d_8x8.tsv"
-export FADECANDY_HOST="raspberrypi0.local"
+export FADECANDY_HOST="localhost"
+#export FADECANDY_HOST="raspberrypi0.local"
 
 PYTHONPATH=$(pwd) python3 $(pwd)/lib/floasis/main.py \
     --led-cfg=${LED_MAPPING} \
