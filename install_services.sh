@@ -5,12 +5,12 @@ sudo cp system/services/anim.service /etc/systemd/system/anim.service
 sudo cp system/services/anim_test.service /etc/systemd/system/anim_test.service
 
 sudo systemctl enable fcserver.service
-sudo systemctl enable anim.service
+sudo systemctl disable anim.service
 sudo systemctl enable anim_test.service
 
 sudo systemctl restart fcserver.service
-sudo systemctl restart anim.service
 sudo systemctl restart anim_test.service
+sudo systemctl stop anim.service
 
 sudo systemctl status fcserver.service
 sudo systemctl status anim.service
