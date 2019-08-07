@@ -101,7 +101,7 @@ class Animator(object):
 
         t = self.counter * self.speed_coef
 
-        if self.counter % 100:
+        if self.counter % 1000:
             print('speed={s} t={t}, s0={s0}, s1={s1}'
                   '\n\trp={rp}, gp={gp}, bp={bp}, wp={wp}'
                   '\n\trh={rh}, gh={gh}, bh={bh}, wh={wh}'

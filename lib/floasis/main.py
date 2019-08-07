@@ -34,38 +34,51 @@ if __name__ == '__main__':
     blu_button = Button(BUTTON_PINID_BLU, **btn_args)
     grn_button = Button(BUTTON_PINID_GRN, **btn_args)
     whi_button = Button(BUTTON_PINID_WHI, **btn_args)
-    button_mgr = ButtonManager(btn_red=red_button,
-                      btn_grn=grn_button,
-                      btn_blu=blu_button,
-                      btn_whi=whi_button)
-
-
-    updown = IncrementorManager(name='scale_0', min_value=0.0, max_value=1.0,
-                                default_value=0.2, step_size=0.05)
-    leftright = IncrementorManager(name='scale_1', min_value=0.0, max_value=1.0,
-                                default_value=0.2, step_size=0.05)
+    button_mgr = ButtonManager(
+        btn_red=red_button,
+        btn_grn=grn_button,
+        btn_blu=blu_button,
+        btn_whi=whi_button,
+    )
+    updown = IncrementorManager(
+        name='scale_0',
+        min_value=0.0,
+        max_value=1.0,
+        default_value=0.2,
+        step_size=0.05,
+    )
+    leftright = IncrementorManager(
+        name='scale_1',
+        min_value=0.0,
+        max_value=1.0,
+        default_value=0.2,
+        step_size=0.05,
+    )
     joystick_up = Button(JOYSTICK_PINID_UP)
     joystick_down = Button(JOYSTICK_PINID_DOWN)
     joystick_left = Button(JOYSTICK_PINID_LEFT)
     joystick_right = Button(JOYSTICK_PINID_RIGHT)
-    joystick_mgr = JoystickManager(btn_up=joystick_up,
-                                   btn_down=joystick_down,
-                                   btn_left=joystick_left,
-                                   btn_right=joystick_right,
-                                   mgr_updown=updown,
-                                   mgr_leftright=leftright)
+    joystick_mgr = JoystickManager(
+        btn_up=joystick_up,
+        btn_down=joystick_down,
+        btn_left=joystick_left,
+        btn_right=joystick_right,
+        mgr_updown=updown,
+        mgr_leftright=leftright,
+    )
 
     pin_ccw = Button(ROTARY_PINID_COUNTERCLOCKWISE, pull_up=True)
     pin_cw = Button(ROTARY_PINID_CLOCKWISE, pull_up=True)
-    rotary_encoder = RotaryEncoder(pin_ccw, pin_cw,
-                                   max_value=3.0,
-                                   step_size=0.1)
+    rotary_encoder = RotaryEncoder(
+        pin_ccw, pin_cw, max_value=3.0, step_size=0.1)
 
-    anim = Animator(_renderer=renderer2d,
-                    speed_coef_mgr=rotary_encoder,
-                    scale_0_mgr=leftright,
-                    scale_1_mgr=updown,
-                    buttons=button_mgr)
+    anim = Animator(
+        _renderer=renderer2d,
+        speed_coef_mgr=rotary_encoder,
+        scale_0_mgr=leftright,
+        scale_1_mgr=updown,
+        buttons=button_mgr,
+    )
 
     while True:
         anim.draw()

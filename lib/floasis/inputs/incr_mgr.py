@@ -3,6 +3,7 @@ from lib.floasis.config import *
 
 EPSILON = 1e-4
 
+
 class IncrementorManager(object):
 
     def __init__(self,
