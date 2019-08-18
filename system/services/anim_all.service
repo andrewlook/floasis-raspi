@@ -3,7 +3,7 @@ Description=Animator
 After=network.target
 
 [Service]
-ExecStart=/home/pi/floasis-raspi/anim_test.sh
+ExecStart=/home/pi/floasis-raspi/anim_all.sh
 WorkingDirectory=/home/pi/floasis-raspi
 StandardOutput=inherit
 StandardError=inherit
