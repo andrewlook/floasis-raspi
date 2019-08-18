@@ -10,14 +10,12 @@
 "devices": [
     {
         "type": "fadecandy",
-        "serial": "QOSIPVLJUYXTTLOR",
         "map": [
             [ 0, 0, 0, 512]
         ]
     },
     {
         "type": "fadecandy",
-        "serial": "DFZITZUAQWVSSCHB",
         "map": [[ 0, 512, 0, 512]]
     }
 ]
