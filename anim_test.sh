@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PYTHONPATH=$(pwd) python3 $(pwd)/lib/floasis/main.py \
-    --led-cfg="$(pwd)/configs/floasis_2d_8x8.tsv" \
+    --led-cfg="$(pwd)/configs/flo_tsv/floasis_2d_8x8.tsv" \
     --led-num=64 \
     --width=8 \
     --height=7 \
